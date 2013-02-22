@@ -1,0 +1,17 @@
+{
+  "name": "component-sass",
+  "version": "0.0.1",
+  "description": "Transpiles Sass files for component builds.",
+  "keywords": [
+    "component",
+    "sass",
+    "scss"
+  ],
+  "author": "Segment.io <friends@segment.io>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/segmentio/component-sass.git"
+  },
+  "main": "index.js"
+}
