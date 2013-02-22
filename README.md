@@ -1,6 +1,6 @@
 # component-sass
 
-  Transpile Sass files for your component builds.
+  A plugin to transpile Sass files for the component builder.
 
 ## Install
 
