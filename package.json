@@ -1,7 +1,7 @@
 {
   "name": "component-sass",
   "version": "0.0.1",
-  "description": "Transpiles Sass files for component builds.",
+  "description": "A plugin to transpile Sass files for the component builder.",
   "keywords": [
     "component",
     "sass",
