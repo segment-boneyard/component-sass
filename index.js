@@ -50,8 +50,8 @@ module.exports = function compileSass (builder) {
       });
     });
 
+    batch.end(callback);
   });
-
 };
 
 
