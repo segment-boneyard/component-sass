@@ -33,6 +33,6 @@
   builder.build(function(err, res){
     if (err) throw err;
     fs.writeFileSync('build/build.js', res.require + res.js);
-    fs.writeFileSync('build/build.css', res.css);
+    if (res.css) fs.writeFileSync('build/build.css', res.css);
   });
   ```
