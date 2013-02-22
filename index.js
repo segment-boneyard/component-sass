@@ -11,6 +11,8 @@ var fs    = require('fs')
 
 var compass = false;
 
+var importPath = null;
+
 
 /**
  * Replace Sass files with CSS files.
@@ -35,12 +37,16 @@ module.exports = function compileSass (builder) {
         debug('compiling: %s', sassFile);
 
         // TODO this isnt real...
+        //
+        // What needs to happen:
+        // - Use compass (check if enabled and installed)
+        // - otherwise use sass
+        // - add the -I directive if we have something to import
         sass.render(sassString, function (err, css) {
           builder.addFile('styles', name, css);
           builder.removeFile('styles', sassFile);
           done();
         });
-
       });
     });
 
@@ -50,9 +56,19 @@ module.exports = function compileSass (builder) {
 
 
 /**
- * Whether to use Compass.
+ * Toggle using Compass.
  */
 
 module.exports.compass = function (enabled) {
   compass = enabled;
+};
+
+
+/**
+ * Add a path to the IMPORT_PATH sass option, which lets files in that directory
+ * findable by Sass's @import directive.
+ */
+
+module.exports.import = function (path) {
+  importPath = path;
 };
