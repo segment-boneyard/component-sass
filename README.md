@@ -22,13 +22,13 @@
   Use the plugin during your build process:
 
   ```js
-  var fs            = require('fs')
-    , Builder       = require('component-builder')
-    , componentSass = require('component-sass');
+  var fs      = require('fs')
+    , Builder = require('component-builder')
+    , sass    = require('component-sass');
 
   var builder = new Builder(__dirname);
 
-  builder.use(componentSass);
+  builder.use(sass);
 
   builder.build(function(err, res){
     if (err) throw err;
