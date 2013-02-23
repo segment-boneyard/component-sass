@@ -1,57 +1,51 @@
-var fs    = require('fs')
-  , Batch = require('batch')
+var async = require('async')
   , debug = require('debug')('component:sass')
+  , fs    = require('fs')
+  , path  = require('path')
   , sass  = require('node-sass');
-
-
-
-/**
- * Settings.
- */
-
-var compass = false;
-
-var importPath = null;
 
 
 /**
  * Replace Sass files with CSS files.
  */
+module.exports = function (builder, options) {
 
-module.exports = function compileSass (builder) {
+  options = options || {};
 
   builder.hook('before styles', function (builder, callback) {
     if (!builder.conf.styles) return callback();
 
-    var sassFiles = builder.conf.styles.filter(function (name) {
+    var files = builder.conf.styles.filter(function (name) {
       return name.match(/\.[sass|scss]$/i);
     });
 
-    var batch = new Batch();
+    processFiles(builder, files, options, callback);
+  });
+};
 
-    sassFiles.forEach(function (sassFile) {
-      batch.push(function (done) {
-        var path = builder.path(sassFile)
-          , name = sassFile.split('.')[0] + '.css';
 
-        debug('compiling: %s', sassFile);
 
-        // TODO this isnt real...
-        //
-        // What needs to happen:
-        // - Use compass (check if enabled and installed)
-        // - otherwise use sass
-        // - add the -I directive if we have something to import
-        sass.render(sassString, function (err, css) {
-          builder.addFile('styles', name, css);
-          builder.removeFile('styles', sassFile);
-          done();
-        });
-      });
+var processFiles = function (builder, files, option, callback) {
+
+  async.forEach(files, function (file, done) {
+
+    debug('compiling: %s', file);
+
+    var filePath = builder.path(file)
+      , output   = path.basename(file, path.ext(file)) + '.css';
+
+    sass.compile(file, options, function (err, css) {
+
+      if (err) {
+        debug('error compiling: %s, %s', file, err);
+        return done(err);
+      }
+
+      builder.addFile('styles', name, css);
+      builder.removeFile('styles', filePath);
     });
 
-    batch.end(callback);
-  });
+  }, callback);
 };
 
 
