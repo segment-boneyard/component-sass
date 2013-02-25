@@ -13,14 +13,13 @@
     "type": "git",
     "url": "git://github.com/segmentio/component-sass.git"
   },
-  "main": "index.js",
   "dependencies": {
-    "async": "~0.2.5",
-    "node-sass": "git://github.com/ckhampus/node-sass.git",
-    "debug": "~0.7.2"
+    "batch": "0.2.1",
+    "debug": "~0.7.2",
+    "node-sass-wrapper": "git://github.com/segmentio/node-sass-wrapper.git"
   },
   "devDependencies": {
-    "component-builder": "git://github.com/calvinfo/builder.js.git#conf-race",
-    "mkdirp": "*"
-  }
+    "component-builder": "git://github.com/calvinfo/builder.js.git#conf-race"
+  },
+  "main": "index.js"
 }
