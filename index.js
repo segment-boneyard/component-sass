@@ -1,8 +1,12 @@
 var async = require('async')
-  , debug = require('debug')('component:sass')
+  , debug = require('debug')('component-sass')
   , fs    = require('fs')
   , path  = require('path')
-  , sass  = require('node-sass');
+  , sass  = require('sass');
+
+
+var compass    = true
+  , importPath;
 
 
 /**
@@ -10,13 +14,15 @@ var async = require('async')
  */
 module.exports = function (builder, options) {
 
-  options = options || {};
+  options = options || {
+    useCompass : compass
+  };
 
   builder.hook('before styles', function (builder, callback) {
     if (!builder.conf.styles) return callback();
 
     var files = builder.conf.styles.filter(function (name) {
-      return name.match(/\.[sass|scss]$/i);
+      return /\.(sass|scss)/i.test(path.extname(name));
     });
 
     processFiles(builder, files, options, callback);
@@ -25,16 +31,16 @@ module.exports = function (builder, options) {
 
 
 
-var processFiles = function (builder, files, option, callback) {
+var processFiles = function (builder, files, options, callback) {
 
   async.forEach(files, function (file, done) {
 
     debug('compiling: %s', file);
 
     var filePath = builder.path(file)
-      , output   = path.basename(file, path.ext(file)) + '.css';
+      , name     = path.basename(file, path.extname(file)) + '.css';
 
-    sass.compile(file, options, function (err, css) {
+    sass.compile(filePath, options, function (err, css) {
 
       if (err) {
         debug('error compiling: %s, %s', file, err);
@@ -42,7 +48,8 @@ var processFiles = function (builder, files, option, callback) {
       }
 
       builder.addFile('styles', name, css);
-      builder.removeFile('styles', filePath);
+      builder.removeFile('styles', file);
+      done();
     });
 
   }, callback);

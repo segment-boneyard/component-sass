@@ -1,10 +1,9 @@
 var Builder = require('component-builder')
   , fs      = require('fs')
   , mkdir   = require('mkdirp')
-  , path    = require('path')
   , sass    = require('../');
 
-var builder = new Builder(path.resolve(__dirname, '../example'));
+var builder = new Builder(__dirname);
 
 builder.use(sass);
 
