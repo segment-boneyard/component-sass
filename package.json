@@ -16,7 +16,8 @@
   "dependencies": {
     "debug": "~0.7.2",
     "node-sass-wrapper": "git://github.com/segmentio/node-sass-wrapper.git",
-    "async": "~0.2.6"
+    "async": "~0.2.6",
+    "batch": "~0.2.1"
   },
   "devDependencies": {
     "component-builder": "git://github.com/calvinfo/builder.js.git#conf-race"

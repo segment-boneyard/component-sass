@@ -1,4 +1,4 @@
-var async = require('async')
+var Batch = require('batch')
   , fs    = require('fs')
   , path  = require('path')
   , sass  = require('node-sass-wrapper')
@@ -31,23 +31,28 @@ module.exports = function (builder) {
   builder.hook('before styles', function (builder, callback) {
     if (!builder.conf.styles) return callback();
 
-    var files = builder.conf.styles.filter(sassFilter);
+    var files = builder.conf.styles.filter(sassFilter)
+      , batch = new Batch();
 
-    async.each(files, function (file, done) {
-      debug('compiling: %s', file);
+    files.forEach(function (file) {
+      batch.push(function (done) {
+        debug('compiling: %s', file);
 
-      sass.compile(builder.path(file), options, function (err, css) {
-        if (err) {
-          debug('error compiling: %s, %s', file, err);
-          return done(err);
-        }
+        sass.compile(builder.path(file), options, function (err, css) {
+          if (err) {
+            debug('error compiling: %s, %s', file, err);
+            return done(err);
+          }
 
-        var newFile = path.basename(file, path.extname(file)) + '.css';
-        builder.addFile('styles', newFile, css);
-        builder.removeFile('styles', file);
-        done();
+          var newFile = path.basename(file, path.extname(file)) + '.css';
+          builder.addFile('styles', newFile, css);
+          builder.removeFile('styles', file);
+          done();
+        });
       });
-    }, callback);
+    });
+
+    batch.end(callback);
   });
 };
 
