@@ -1,4 +1,4 @@
-var Batch = require('batch')
+var async = require('async')
   , fs    = require('fs')
   , path  = require('path')
   , sass  = require('node-sass-wrapper')
@@ -8,14 +8,17 @@ var Batch = require('batch')
 
 /**
  * Options.
+ *
+ * Keep em null so that we just their Sass defaults.
  */
 
 var options = {
-  compass   : true,
-  style     : 'nested',
-  precision : 3,
+  compass   : null,
+  style     : null,
+  precision : null,
   loadPath  : null,
   require   : null,
+  import    : null
 };
 
 
@@ -28,31 +31,23 @@ module.exports = function (builder) {
   builder.hook('before styles', function (builder, callback) {
     if (!builder.conf.styles) return callback();
 
-    var files = builder.conf.styles.filter(sassFilter)
-      , batch = new Batch();
+    var files = builder.conf.styles.filter(sassFilter);
 
-    files.forEach(function (file) {
-      batch.push(function (done) {
-        debug('compiling: %s', file);
+    async.each(files, function (file, done) {
+      debug('compiling: %s', file);
 
-        var filePath = builder.path(file)
-          , name     = path.basename(file, path.extname(file)) + '.css';
+      sass.compile(builder.path(file), options, function (err, css) {
+        if (err) {
+          debug('error compiling: %s, %s', file, err);
+          return done(err);
+        }
 
-        sass.compile(filePath, options, function (err, css) {
-          if (err) {
-            debug('error compiling: %s, %s', file, err);
-            return done(err);
-          }
-
-          builder.addFile('styles', name, css);
-          builder.removeFile('styles', file);
-          done();
-        });
-
+        var newFile = path.basename(file, path.extname(file)) + '.css';
+        builder.addFile('styles', newFile, css);
+        builder.removeFile('styles', file);
+        done();
       });
-    });
-
-    batch.end(callback);
+    }, callback);
   });
 };
 
@@ -100,6 +95,19 @@ module.exports.loadPath = function (path) {
 
 module.exports.require = function (plugin) {
   options.require = plugin;
+};
+
+
+/**
+ * Specify a file to import. This is different thatn `loadPath` in that it will
+ * actually wrap your sass files in an import for this file each time, so you
+ * don't need to manually import them.
+ *
+ * This is useful for adding utils like mixins, functions to all your Sass files
+ * in your project (like your own project-specific Compass).
+ */
+module.exports.import = function (file) {
+  options.import = file;
 };
 
 

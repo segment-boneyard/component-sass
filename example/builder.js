@@ -7,6 +7,7 @@ var Builder = require('component-builder')
 var builder = new Builder(__dirname);
 
 sass.style('expanded');
+sass.compass(true);
 builder.use(sass);
 
 builder.build(function (err, res) {
