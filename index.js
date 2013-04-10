@@ -14,11 +14,12 @@ var Batch = require('batch')
 
 var options = {
   compass   : null,
-  style     : null,
-  precision : null,
+  import    : null,
   loadPath  : null,
+  noCache   : null,
+  precision : null,
   require   : null,
-  import    : null
+  style     : null
 };
 
 
@@ -67,11 +68,21 @@ module.exports.compass = function (enabled) {
 
 
 /**
- * Set output style.
+ * Add a path to the IMPORT_PATH sass option, which lets files in that directory
+ * findable by Sass's @import directive.
  */
 
-module.exports.style = function (style) {
-  options.style = style;
+module.exports.loadPath = function (path) {
+  options.loadPath = path;
+};
+
+
+/**
+ * Cache compilation.
+ */
+
+module.exports.noCache = function (enabled) {
+  options.noCache = enabled;
 };
 
 
@@ -85,21 +96,20 @@ module.exports.precision = function (precision) {
 
 
 /**
- * Add a path to the IMPORT_PATH sass option, which lets files in that directory
- * findable by Sass's @import directive.
- */
-
-module.exports.loadPath = function (path) {
-  options.loadPath = path;
-};
-
-
-/**
  * Require Sass plugin.
  */
 
 module.exports.require = function (plugin) {
   options.require = plugin;
+};
+
+
+/**
+ * Set output style.
+ */
+
+module.exports.style = function (style) {
+  options.style = style;
 };
 
 
