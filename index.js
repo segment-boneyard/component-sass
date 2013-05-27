@@ -30,9 +30,9 @@ var options = {
 module.exports = function (builder) {
 
   builder.hook('before styles', function (builder, callback) {
-    if (!builder.conf.styles) return callback();
+    if (!builder.config.styles) return callback();
 
-    var files = builder.conf.styles.filter(sassFilter)
+    var files = builder.config.styles.filter(sassFilter)
       , batch = new Batch();
 
     files.forEach(function (file) {
