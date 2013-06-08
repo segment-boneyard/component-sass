@@ -1,6 +1,6 @@
 {
   "name": "component-sass",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A plugin to transpile Sass files for the component builder.",
   "keywords": [
     "component",
@@ -17,7 +17,7 @@
     "debug": "~0.7.2",
     "async": "~0.2.6",
     "batch": "~0.2.1",
-    "node-sass-wrapper": "0.0.1"
+    "node-sass-wrapper": "~0.0.1"
   },
   "devDependencies": {
     "component-builder": "git://github.com/calvinfo/builder.js.git#conf-race"
