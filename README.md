@@ -4,7 +4,7 @@
 
 ## Install
 
-    $ npm install component-sass
+    $ npm install --save segmentio/component-sass#0.0.3
 
 ## Usage
   
