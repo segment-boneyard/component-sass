@@ -4,7 +4,18 @@
 
 ## Install
 
-    $ npm install component-sass
+    $ npm install segmentio/component-sass#master
+    
+- Unfortunately a `component-sass` package already exists on `npm`. Using this path will get this package into your builder.
+
+Add it to your `package.json`
+
+    {
+      ...
+      "component-sass": "segmentio/component-sass#master",
+      ...
+    }
+
 
 ## Usage
   
